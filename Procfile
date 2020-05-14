@@ -1,0 +1,1 @@
+web: gunicorn "application.app:create_flask_app()" --log-file=-

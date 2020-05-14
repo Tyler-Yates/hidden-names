@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+{% include 'head.html' %}
+<body>
+<div class="container my-2">
+    <p class="text-center">
+        Documents are automatically deleted after {{ collection_ttl/60/60 }} hours.
+    </p>
+</div>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">_id</th>
+            <th scope="col">text</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for document in documents %}
+            <tr>
+                <td><a href="/documents/{{ document['_id'] }}">{{ document['_id'] }}</a></td>
+                <td>{{ document["text"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <div class="btn-group">
+        <form action="/create_document" method="get">
+            <button type="submit" class="btn btn-success mr-1">Create Document</button>
+        </form>
+        <form action="/delete_documents" method="post">
+            <button type="submit" class="btn btn-danger mr-1"
+                    onclick="return confirm('Are you sure you want to delete all documents?')">
+                Delete All Documents
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

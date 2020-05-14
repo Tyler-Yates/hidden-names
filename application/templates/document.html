@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+{% include 'head.html' %}
+<body>
+<div class="container">
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">_id</th>
+            <th scope="col">text</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ document['_id'] }}</td>
+            <td>{{ document['text'] }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <div class="btn-group">
+        <form action="/documents" method="get">
+            <button type="submit" class="btn btn-primary mr-1">Documents</button>
+        </form>
+        <form action="/delete_document/{{ document['_id'] }}" method="post">
+            <button type="submit" class="btn btn-danger mr-1"
+                    onclick="return confirm('Are you sure you want to delete this document?')">
+                Delete Document
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
