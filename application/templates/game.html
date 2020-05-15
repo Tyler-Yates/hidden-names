@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'head.html' %}
+<body>
+<h1>{{ game_name }}</h1>
+<div>
+    {% for word in game_state.words %}
+        {% if game_state.hidden_values[loop.index] == 3 %}
+            <p class="text-light bg-dark">{{ word }}</p>
+        {% endif %}
+        {% if game_state.hidden_values[loop.index] == 2 %}
+            <p class="text-danger">{{ word }}</p>
+        {% endif %}
+        {% if game_state.hidden_values[loop.index] == 1 %}
+            <p class="text-primary">{{ word }}</p>
+        {% endif %}
+        {% if game_state.hidden_values[loop.index] == 0 %}
+            <p>{{ word }}</p>
+        {% endif %}
+    {% endfor %}
+</div>
+</body>
+</html>

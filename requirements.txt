@@ -1,5 +1,4 @@
 Flask
 gunicorn
-pymongo
-dnspython
-flask_accept
+flask-socketio
+eventlet
