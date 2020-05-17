@@ -2,21 +2,29 @@
 <html lang="en">
 {% include 'head.html' %}
 <body>
-<h1>{{ game_name }}</h1>
+<h1>{{ game_state.game_name }}</h1>
 <div>
-    {% for word in game_state.words %}
-        {% if game_state.hidden_values[loop.index] == 3 %}
-            <p class="text-light bg-dark">{{ word }}</p>
+    {% for game_tile in game_state.game_tiles.values() %}
+        {% if game_tile.guessed is sameas true %}
+            {% if game_tile.hidden_value == 3 %}
+                {% set class = "btn btn-dark" %}
+            {% elif game_tile.hidden_value == 2 %}
+                {% set class = "btn btn-danger" %}
+            {% elif game_tile.hidden_value == 1 %}
+                {% set class = "btn btn-primary" %}
+            {% else %}
+                {% set class = "btn btn-secondary" %}
+            {% endif %}
+        {% else %}
+            {% set class = "btn btn-light" %}
         {% endif %}
-        {% if game_state.hidden_values[loop.index] == 2 %}
-            <p class="text-danger">{{ word }}</p>
-        {% endif %}
-        {% if game_state.hidden_values[loop.index] == 1 %}
-            <p class="text-primary">{{ word }}</p>
-        {% endif %}
-        {% if game_state.hidden_values[loop.index] == 0 %}
-            <p>{{ word }}</p>
-        {% endif %}
+
+        <form action="/games/{{ game_state.game_name }}/guess" enctype="application/x-www-form-urlencoded" method="post">
+            <button type="submit" class="{{ class }}">
+                <input type="hidden" name="word" value="{{ game_tile.word }}"/>
+                {{ game_tile.word }}
+            </button>
+        </form>
     {% endfor %}
 </div>
 </body>

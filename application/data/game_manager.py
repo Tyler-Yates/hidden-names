@@ -24,7 +24,7 @@ class GameManager:
         while game_name in self.games:
             game_name = self._create_game_name()
 
-        self.games[game_name] = GameState()
+        self.games[game_name] = GameState(game_name)
 
         return game_name
 

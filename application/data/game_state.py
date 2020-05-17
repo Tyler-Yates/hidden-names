@@ -1,7 +1,8 @@
 import random
 import string
-from typing import List
+from typing import List, Dict
 
+from application.data.game_tile import GameTile
 
 WORD_COUNT = 25
 
@@ -11,13 +12,25 @@ class GameState:
     Class representing the state of a game.
     """
 
-    def __init__(self):
+    def __init__(self, game_name: str):
         """
         Generates a new, random game state.
         """
-        self.words = self._generate_words()
-        self.hidden_values = self._generate_hidden_values()
-        self.picked_words = set()
+        self.game_name = game_name
+        self.game_tiles: Dict[str, GameTile] = dict()
+
+        words = self._generate_words()
+        hidden_values = self._generate_hidden_values()
+        for i in range(0, WORD_COUNT):
+            word = words[i]
+            hidden_value = hidden_values[i]
+            self.game_tiles[word] = GameTile(word, hidden_value)
+
+        print(self.game_tiles)
+
+    def guess_word(self, guessed_word: str):
+        game_tile = self.game_tiles[guessed_word]
+        game_tile.guessed = True
 
     @staticmethod
     def _generate_words() -> List[str]:
