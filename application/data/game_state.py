@@ -37,6 +37,12 @@ class GameState:
         print(self.game_tiles)
 
     def end_turn(self) -> GameUpdate:
+        """
+        Ends the current team's turn and creates the GameUpdate to send to clients.
+
+        Returns:
+            the game update
+        """
         if self.current_team == 1:
             self.current_team = 2
         else:
@@ -48,9 +54,13 @@ class GameState:
         """
         Updates the game state to reflect the guessed word.
         If the guess is not correct, the current team's turn is ended.
+        Returns the GameUpdate to send to clients.
 
         Args:
             guessed_word: The guessed word
+
+        Returns:
+            the game update
         """
         game_tile = self.game_tiles.get(guessed_word, None)
 
@@ -103,10 +113,10 @@ class GameState:
 
     def get_game_update(self) -> GameUpdate:
         """
-        Returns the current tiles in a list of JSON compatible dictionaries.
+        Returns the entire board state to send to clients as a GameUpdate.
 
         Returns:
-            the tiles
+            the game update
         """
         return GameUpdate(self)
 
