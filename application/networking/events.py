@@ -1,3 +1,4 @@
+import flask
 from flask import current_app
 from flask_socketio import emit, join_room
 
@@ -9,6 +10,11 @@ from .. import socketio
 def joined(message):
     room = message["room"]
     join_room(room)
+    session_id = flask.request.sid
+
+    print(f"User {session_id} has joined room {room}")
+    game_state = _get_game_manager().get_game_state(room)
+    emit("reload", {"game_state": game_state.get_tiles_json()}, to=session_id)
 
 
 @socketio.on("guess")
@@ -24,7 +30,8 @@ def guessed_word(message):
     game_state = _get_game_manager().get_game_state(room)
     game_state.guess_word(guessed_word)
 
-    emit("reload", {"game_state": game_state.get_tiles_json()}, room=room)
+    updated_tile = game_state.game_tiles[guessed_word].to_json()
+    emit("reload", {"game_state": [updated_tile]}, room=room)
 
 
 def _get_game_manager() -> GameManager:
