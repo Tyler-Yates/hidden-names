@@ -24,9 +24,6 @@ def joined(message):
 
 @socketio.on("guess")
 def guessed_word(message):
-    """Sent by clients when they enter a room.
-    A status message is broadcast to all people in the room."""
-    # TODO figure out how to get the game name
     print(f"Received guess: {message}")
 
     room = message["room"]
@@ -34,6 +31,18 @@ def guessed_word(message):
 
     game_state = _get_game_manager().get_game_state(room)
     game_update = game_state.guess_word(guessed_word)
+
+    emit("game_update", {"game_state": game_update.to_json()}, room=room)
+
+
+@socketio.on("end_turn")
+def end_turn(message):
+    print(f"Received end_turn: {message}")
+
+    room = message["room"]
+
+    game_state = _get_game_manager().get_game_state(room)
+    game_update = game_state.end_turn()
 
     emit("game_update", {"game_state": game_update.to_json()}, room=room)
 

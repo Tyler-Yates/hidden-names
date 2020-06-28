@@ -18,14 +18,14 @@ $(document).ready(function () {
         });
     });
 
-    add_button_event_listener(socket, roomName);
+    add_button_event_listeners(socket, roomName);
 });
 
 // Function that sets up the logic for emitting a socket message when clicking on a button.
-function add_button_event_listener(socket, roomName) {
+function add_button_event_listeners(socket, roomName) {
     // Add an event wrapper to the entire button div but filter clicks only for button elements.
-    const wrapper = document.getElementById('button-container');
-    wrapper.addEventListener('click', (event) => {
+    const buttonWrapper = document.getElementById('button-container');
+    buttonWrapper.addEventListener('click', (event) => {
         const isButton = event.target.nodeName === 'BUTTON';
         if (!isButton) {
             return;
@@ -35,6 +35,11 @@ function add_button_event_listener(socket, roomName) {
         const inputElement = document.getElementById(inputId);
 
         socket.emit('guess', {'room': roomName, 'guess': inputElement.value});
+    });
+
+    const endTurnButton = document.getElementById('end-turn-button');
+    endTurnButton.addEventListener('click', (event) => {
+        socket.emit('end_turn', {'room': roomName});
     });
 }
 
@@ -88,5 +93,5 @@ function update_tile(word, hidden_value, guessed) {
     }
 
 
-    tile.setAttribute("class", `btn btn-block shadow-none rounded-0 ${category}`);
+    tile.setAttribute("class", `btn btn-tile btn-block shadow-none rounded-0 ${category}`);
 }

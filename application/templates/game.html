@@ -46,13 +46,31 @@
         {% endif %}
 
         <div class="col">
-            <button id="button-{{ game_tile.word }}" class="btn btn-light btn-block rounded-0">
+            <button id="button-{{ game_tile.word }}" class="btn btn-tile btn-light btn-block rounded-0">
                 <input type="hidden" id="button-{{ game_tile.word }}-input" name="word" value="{{ game_tile.word }}"/>
                 {{ game_tile.word }}
             </button>
         </div>
     {% endfor %}
     </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <hr>
+        </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <!-- TODO: Add a toggle for spymaster mode -->
+            Spymaster
+        </div>
+        <div class="col text-right">
+            <button id="end-turn-button" class="btn btn-secondary">End Turn</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

@@ -12,10 +12,10 @@ class GameUpdate:
         if game_state.winning_team:
             self.winning_team = game_state.winning_team
 
-        if tiles:
-            self.tiles = tiles
-        else:
+        if tiles is None:
             self.tiles = game_state.get_tiles_json()
+        else:
+            self.tiles = tiles
 
     def to_json(self) -> Dict[str, object]:
         return self.__dict__
