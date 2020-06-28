@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     {% include 'head.html' %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='matrix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='game.css') }}">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='game.js') }}"></script>
 </head>
@@ -62,9 +62,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
-            <!-- TODO: Add a toggle for spymaster mode -->
-            Spymaster
+        <div class="col btn-group">
+            <button id="guesser-button" class="btn btn-info">Guesser</button>
+            <button id="spymaster-button" class="btn btn-light gray-button">Spymaster</button>
         </div>
         <div class="col text-right">
             <button id="end-turn-button" class="btn btn-secondary">End Turn</button>

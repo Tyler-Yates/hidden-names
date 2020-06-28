@@ -1,0 +1,27 @@
+.btn-row {
+    height: 100px;
+}
+
+.btn-tile {
+    height: 100px;
+    font-size: 150%;
+}
+
+#spymaster-button {
+    border-color: darkgray;
+    border-left: 0;
+}
+
+#guesser-button {
+    border-color: darkgray;
+    border-right: 0;
+}
+
+.gray-button {
+    color: darkgray;
+}
+
+.btn-dark:disabled {
+    background-color: #444444;
+    opacity: 100;
+}

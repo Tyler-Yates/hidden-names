@@ -1,3 +1,5 @@
+let spymasterMode = false;
+
 $(document).ready(function () {
     const socket = io.connect('http://' + document.domain + ':' + location.port);
 
@@ -37,9 +39,30 @@ function add_button_event_listeners(socket, roomName) {
         socket.emit('guess', {'room': roomName, 'guess': inputElement.value});
     });
 
+    // Add event listener to the end turn button.
     const endTurnButton = document.getElementById('end-turn-button');
     endTurnButton.addEventListener('click', (event) => {
         socket.emit('end_turn', {'room': roomName});
+    });
+
+    // Add event listeners to the player mode buttons.
+    const sypmasterButton = document.getElementById('spymaster-button');
+    const guesserButton = document.getElementById('guesser-button');
+    sypmasterButton.addEventListener('click', (event) => {
+        spymasterMode = true;
+
+        sypmasterButton.setAttribute("class", "btn btn-info shadow-none");
+        guesserButton.setAttribute("class", "btn btn-light gray-button shadow-none");
+
+        socket.emit('player_mode_change', {'room': roomName});
+    });
+    guesserButton.addEventListener('click', (event) => {
+        spymasterMode = false;
+
+        sypmasterButton.setAttribute("class", "btn btn-light gray-button shadow-none");
+        guesserButton.setAttribute("class", "btn btn-info shadow-none");
+
+        socket.emit('player_mode_change', {'room': roomName});
     });
 }
 
@@ -76,7 +99,7 @@ function update_tile(word, hidden_value, guessed) {
 
     let category = "btn-light";
 
-    if (guessed) {
+    if (guessed || spymasterMode) {
         // Make button unclickable
         const disabledAttribute = document.createAttribute("disabled");
         tile.setAttributeNode(disabledAttribute);

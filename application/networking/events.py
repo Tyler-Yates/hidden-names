@@ -22,6 +22,21 @@ def joined(message):
         emit("error", {"message": "Requested to join invalid room."}, to=session_id)
 
 
+@socketio.on("player_mode_change")
+def player_mode_change(message):
+    room = message["room"]
+    session_id = flask.request.sid
+
+    print(f"User {session_id} has changed mode in room {room}")
+    game_state = _get_game_manager().get_game_state(room)
+
+    if game_state:
+        emit("game_update", {"game_state": game_state.get_game_update().to_json()}, to=session_id)
+    else:
+        print(f"User {session_id} requested to join invalid room.")
+        emit("error", {"message": "Requested to join invalid room."}, to=session_id)
+
+
 @socketio.on("guess")
 def guessed_word(message):
     print(f"Received guess: {message}")
