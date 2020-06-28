@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-{% include 'head.html' %}
+<head>
+    {% include 'head.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='matrix.css') }}">
+</head>
 <body>
 <h1>{{ game_state.game_name }}</h1>
-<div>
+<div class="container">
+    <form class="btn-form" action="/games/{{ game_state.game_name }}/guess"
+                      enctype="application/x-www-form-urlencoded"
+                      method="post">
     {% for game_tile in game_state.game_tiles.values() %}
+        {% if loop.index0 is divisibleby(5) %}
+            {% if loop.index0 != 0 %}
+                </div>
+            {% endif %}
+            <div class="row no-gutters">
+        {% endif %}
+
         {% if game_tile.guessed is sameas true %}
             {% if game_tile.hidden_value == 3 %}
                 {% set class = "btn btn-dark" %}
@@ -19,13 +32,14 @@
             {% set class = "btn btn-light" %}
         {% endif %}
 
-        <form action="/games/{{ game_state.game_name }}/guess" enctype="application/x-www-form-urlencoded" method="post">
-            <button type="submit" class="{{ class }}">
+        <div class="col">
+            <button type="submit" class="{{ class }} btn-block rounded-0">
                 <input type="hidden" name="word" value="{{ game_tile.word }}"/>
                 {{ game_tile.word }}
             </button>
-        </form>
+        </div>
     {% endfor %}
+    </form>
 </div>
 </body>
 </html>
