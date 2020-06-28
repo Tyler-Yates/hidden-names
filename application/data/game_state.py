@@ -5,6 +5,8 @@ from typing import List, Dict
 from application.data.game_tile import GameTile
 
 WORD_COUNT = 25
+BLUE_TEAM_TILES = 9
+RED_TEAM_TILES = 8
 
 
 class GameState:
@@ -28,9 +30,27 @@ class GameState:
 
         print(self.game_tiles)
 
-    def guess_word(self, guessed_word: str):
+    def guess_word(self, guessed_word: str) -> None:
+        """
+        Updates the game state to reflect the guessed word.
+
+        Args:
+            guessed_word: The guessed word
+        """
         game_tile = self.game_tiles[guessed_word]
         game_tile.guessed = True
+
+    def get_tiles_json(self) -> List[Dict[str, str]]:
+        """
+        Returns the current tiles in a list of JSON compatible dictionaries.
+
+        Returns:
+            the tiles
+        """
+        tiles = list()
+        for tile in self.game_tiles.values():
+            tiles.append(tile.to_json())
+        return tiles
 
     @staticmethod
     def _generate_words() -> List[str]:
@@ -55,23 +75,17 @@ class GameState:
         hidden_values[assassin_location] = 3
 
         # Blue team
-        for i in range(0, 5):
+        for i in range(0, BLUE_TEAM_TILES):
             index = random.randint(0, len(possible_values) - 1)
             location = possible_values[index]
             possible_values.pop(index)
             hidden_values[location] = 1
 
         # Red team
-        for i in range(0, 5):
+        for i in range(0, RED_TEAM_TILES):
             index = random.randint(0, len(possible_values) - 1)
             location = possible_values[index]
             possible_values.pop(index)
             hidden_values[location] = 2
 
         return hidden_values
-
-    def get_tiles_json(self) -> List[Dict[str, str]]:
-        tiles = list()
-        for tile in self.game_tiles.values():
-            tiles.append(tile.to_json())
-        return tiles
