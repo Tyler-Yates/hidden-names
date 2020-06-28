@@ -3,13 +3,12 @@
 <head>
     {% include 'head.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='matrix.css') }}">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='game.js') }}"></script>
 </head>
 <body>
-<h1>{{ game_state.game_name }}</h1>
-<div class="container">
-    <form class="btn-form" action="/games/{{ game_state.game_name }}/guess"
-                      enctype="application/x-www-form-urlencoded"
-                      method="post">
+<h1 id="game-name">{{ game_state.game_name }}</h1>
+<div id="button-container" class="container">
     {% for game_tile in game_state.game_tiles.values() %}
         {% if loop.index0 is divisibleby(5) %}
             {% if loop.index0 != 0 %}
@@ -33,13 +32,12 @@
         {% endif %}
 
         <div class="col">
-            <button type="submit" class="{{ class }} btn-block rounded-0">
-                <input type="hidden" name="word" value="{{ game_tile.word }}"/>
+            <button id="button-{{ game_tile.word }}" class="{{ class }} btn-block rounded-0">
+                <input type="hidden" id="button-{{ game_tile.word }}-input" name="word" value="{{ game_tile.word }}"/>
                 {{ game_tile.word }}
             </button>
         </div>
     {% endfor %}
-    </form>
 </div>
 </body>
 </html>
