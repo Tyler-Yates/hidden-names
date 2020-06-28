@@ -25,6 +25,7 @@ class GameState:
         self.blue_team_tiles_remaining = BLUE_TEAM_TILES
         self.red_team_tiles_remaining = RED_TEAM_TILES
         self.current_team = 1
+        self.winning_team = None
 
         words = self._generate_words()
         hidden_values = self._generate_hidden_values()
@@ -53,21 +54,39 @@ class GameState:
         """
         game_tile = self.game_tiles.get(guessed_word, None)
 
-        if game_tile is None:
+        # Ensure the guess is actually valid
+        if (game_tile is None) or game_tile.guessed:
             raise ValueError(f"Invalid guess: '{guessed_word}'")
 
+        # Ensure guesses cannot come in after a win
+        if self.winning_team:
+            raise ValueError("A team has already won.")
+
+        # Mark the tile as guessed
         game_tile.guessed = True
+
+        # Incorrect guesses should end the current team's turn
+        if game_tile.hidden_value != self.current_team:
+            self.end_turn()
 
         # Adjust team tile values accordingly
         if game_tile.hidden_value == 1:
             self.blue_team_tiles_remaining -= 1
         elif game_tile.hidden_value == 2:
             self.red_team_tiles_remaining -= 1
+        elif game_tile.hidden_value == 3:
+            if self.current_team == 1:
+                self.winning_team = 2
+            else:
+                self.winning_team = 1
 
-        # Incorrect guesses should end the current team's turn
-        if game_tile.hidden_value != self.current_team:
-            self.end_turn()
+        # See if any team has won
+        if self.blue_team_tiles_remaining == 0:
+            self.winning_team = 0
+        elif self.red_team_tiles_remaining == 0:
+            self.winning_team = 1
 
+        # Return a GameUpdate object so clients can update the page
         return GameUpdate(self, [game_tile.to_json()])
 
     def get_tiles_json(self) -> List[Dict[str, str]]:

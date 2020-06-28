@@ -9,6 +9,9 @@ class GameUpdate:
         self.red_team_tiles_remaining = game_state.red_team_tiles_remaining
         self.current_team = game_state.current_team
 
+        if game_state.winning_team:
+            self.winning_team = game_state.winning_team
+
         if tiles:
             self.tiles = tiles
         else:
