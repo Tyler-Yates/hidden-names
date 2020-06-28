@@ -7,6 +7,7 @@ class GameUpdate:
     def __init__(self, game_state: 'GameState', tiles: List[GameTile]=None):
         self.blue_team_tiles_remaining = game_state.blue_team_tiles_remaining
         self.red_team_tiles_remaining = game_state.red_team_tiles_remaining
+        self.current_team = game_state.current_team
 
         if tiles:
             self.tiles = tiles

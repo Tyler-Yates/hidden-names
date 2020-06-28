@@ -45,6 +45,17 @@ function update_team_information(game_state) {
 
     const red_team_tiles_remaining = game_state.red_team_tiles_remaining;
     document.getElementById('red-team-tiles-remaining').innerText = `${red_team_tiles_remaining}`;
+
+    const current_team = game_state.current_team;
+    if (current_team === 1) {
+        const currentTeamElement = document.getElementById('current-team');
+        currentTeamElement.innerText = "Blue Team";
+        currentTeamElement.setAttribute("class", "text-primary");
+    } else {
+        const currentTeamElement = document.getElementById('current-team');
+        currentTeamElement.innerText = "Red Team";
+        currentTeamElement.setAttribute("class", "text-danger");
+    }
 }
 
 // Handle an update to a particular tile.

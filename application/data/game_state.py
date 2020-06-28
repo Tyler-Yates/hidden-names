@@ -24,6 +24,7 @@ class GameState:
 
         self.blue_team_tiles_remaining = BLUE_TEAM_TILES
         self.red_team_tiles_remaining = RED_TEAM_TILES
+        self.current_team = 1
 
         words = self._generate_words()
         hidden_values = self._generate_hidden_values()
@@ -34,9 +35,18 @@ class GameState:
 
         print(self.game_tiles)
 
+    def end_turn(self) -> GameUpdate:
+        if self.current_team == 1:
+            self.current_team = 2
+        else:
+            self.current_team = 1
+
+        return GameUpdate(self, [])
+
     def guess_word(self, guessed_word: str) -> GameUpdate:
         """
         Updates the game state to reflect the guessed word.
+        If the guess is not correct, the current team's turn is ended.
 
         Args:
             guessed_word: The guessed word
@@ -48,10 +58,15 @@ class GameState:
 
         game_tile.guessed = True
 
+        # Adjust team tile values accordingly
         if game_tile.hidden_value == 1:
             self.blue_team_tiles_remaining -= 1
         elif game_tile.hidden_value == 2:
             self.red_team_tiles_remaining -= 1
+
+        # Incorrect guesses should end the current team's turn
+        if game_tile.hidden_value != self.current_team:
+            self.end_turn()
 
         return GameUpdate(self, [game_tile.to_json()])
 
