@@ -9,3 +9,6 @@ class GameTile:
 
     def __str__(self):
         return f"{self.word} - {self.hidden_value} - {self.guessed}"
+
+    def to_json(self):
+        return self.__dict__

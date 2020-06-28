@@ -17,22 +17,8 @@
             <div class="row no-gutters">
         {% endif %}
 
-        {% if game_tile.guessed is sameas true %}
-            {% if game_tile.hidden_value == 3 %}
-                {% set class = "btn btn-dark" %}
-            {% elif game_tile.hidden_value == 2 %}
-                {% set class = "btn btn-danger" %}
-            {% elif game_tile.hidden_value == 1 %}
-                {% set class = "btn btn-primary" %}
-            {% else %}
-                {% set class = "btn btn-secondary" %}
-            {% endif %}
-        {% else %}
-            {% set class = "btn btn-light" %}
-        {% endif %}
-
         <div class="col">
-            <button id="button-{{ game_tile.word }}" class="{{ class }} btn-block rounded-0">
+            <button id="button-{{ game_tile.word }}" class="btn btn-light btn-block rounded-0">
                 <input type="hidden" id="button-{{ game_tile.word }}-input" name="word" value="{{ game_tile.word }}"/>
                 {{ game_tile.word }}
             </button>

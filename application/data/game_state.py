@@ -69,3 +69,9 @@ class GameState:
             hidden_values[location] = 2
 
         return hidden_values
+
+    def get_tiles_json(self) -> List[Dict[str, str]]:
+        tiles = list()
+        for tile in self.game_tiles.values():
+            tiles.append(tile.to_json())
+        return tiles

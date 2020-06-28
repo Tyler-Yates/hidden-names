@@ -1,12 +1,31 @@
-from flask_socketio import emit
+from flask import current_app
+from flask_socketio import emit, join_room
 
+from application import GameManager, GAME_MANAGER_CONFIG_KEY
 from .. import socketio
 
 
-@socketio.on("guess")
+@socketio.on("join")
 def joined(message):
+    room = message["room"]
+    join_room(room)
+
+
+@socketio.on("guess")
+def guessed_word(message):
     """Sent by clients when they enter a room.
     A status message is broadcast to all people in the room."""
     # TODO figure out how to get the game name
     print(f"Received guess: {message}")
-    # emit("status", {"msg": "User has guessed."}, room=game_name)
+
+    room = message["room"]
+    guessed_word = message["guess"]
+
+    game_state = _get_game_manager().get_game_state(room)
+    game_state.guess_word(guessed_word)
+
+    emit("reload", {"game_state": game_state.get_tiles_json()}, room=room)
+
+
+def _get_game_manager() -> GameManager:
+    return current_app.config[GAME_MANAGER_CONFIG_KEY]
