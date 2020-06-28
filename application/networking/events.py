@@ -14,7 +14,12 @@ def joined(message):
 
     print(f"User {session_id} has joined room {room}")
     game_state = _get_game_manager().get_game_state(room)
-    emit("reload", {"game_state": game_state.get_tiles_json()}, to=session_id)
+
+    if game_state:
+        emit("game_update", {"game_state": game_state.get_game_update().to_json()}, to=session_id)
+    else:
+        print(f"User {session_id} requested to join invalid room.")
+        emit("error", {"message": "Requested to join invalid room."}, to=session_id)
 
 
 @socketio.on("guess")
@@ -28,10 +33,9 @@ def guessed_word(message):
     guessed_word = message["guess"]
 
     game_state = _get_game_manager().get_game_state(room)
-    game_state.guess_word(guessed_word)
+    game_update = game_state.guess_word(guessed_word)
 
-    updated_tile = game_state.game_tiles[guessed_word].to_json()
-    emit("reload", {"game_state": [updated_tile]}, room=room)
+    emit("game_update", {"game_state": game_update.to_json()}, room=room)
 
 
 def _get_game_manager() -> GameManager:
