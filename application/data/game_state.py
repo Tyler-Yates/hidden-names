@@ -86,10 +86,8 @@ class GameState:
         elif game_tile.hidden_value == 2:
             self.red_team_tiles_remaining -= 1
         elif game_tile.hidden_value == 3:
-            if self.current_team == 1:
-                self.winning_team = 2
-            else:
-                self.winning_team = 1
+            # Assassin is always an incorrect guess so the current team has already been changed
+            self.winning_team = self.current_team
 
         # See if any team has won
         if self.blue_team_tiles_remaining == 0:
@@ -123,12 +121,7 @@ class GameState:
 
     @staticmethod
     def _generate_words(word_manager: WordManager) -> List[str]:
-        words = []
-        for i in range(0, WORD_COUNT):
-            word = word_manager.get_random_word()
-            words.append(word)
-
-        return words
+        return word_manager.get_random_words(WORD_COUNT)
 
     @staticmethod
     def _generate_hidden_values() -> List[int]:

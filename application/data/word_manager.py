@@ -1,5 +1,6 @@
 import os
 import random
+from typing import List
 
 FILE_LOCATION = os.path.dirname(os.path.realpath(__file__))
 
@@ -14,5 +15,5 @@ class WordManager:
 
         print(f"Loaded {len(self.words)} words.")
 
-    def get_random_word(self) -> str:
-        return random.choice(self.words)
+    def get_random_words(self, number_of_words: int) -> List[str]:
+        return random.sample(self.words, number_of_words)

@@ -114,7 +114,7 @@ function update_tile(word, hidden_value, guessed) {
             category = "btn-secondary";
         }
     } else {
-        if(tile.hasAttribute("disabled")) {
+        if (tile.hasAttribute("disabled")) {
             tile.removeAttribute("disabled");
         }
     }
