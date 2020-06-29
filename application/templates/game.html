@@ -37,6 +37,7 @@
 </div>
 
 <div id="button-container" class="container">
+<div id="inner-button-container">
     {% for game_tile in game_state.game_tiles.values() %}
         {% if loop.index0 is divisibleby(5) %}
             {% if loop.index0 != 0 %}
@@ -53,6 +54,7 @@
         </div>
     {% endfor %}
     </div>
+</div>
 </div>
 
 <div class="container">
