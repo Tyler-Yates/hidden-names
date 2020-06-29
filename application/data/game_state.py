@@ -4,6 +4,7 @@ from typing import List, Dict
 
 from application.data.game_tile import GameTile
 from application.data.game_update import GameUpdate
+from application.data.word_manager import WordManager
 
 WORD_COUNT = 25
 BLUE_TEAM_TILES = 9
@@ -15,7 +16,7 @@ class GameState:
     Class representing the state of a game.
     """
 
-    def __init__(self, game_name: str):
+    def __init__(self, game_name: str, word_manager: WordManager):
         """
         Generates a new, random game state.
         """
@@ -27,7 +28,7 @@ class GameState:
         self.current_team = 1
         self.winning_team = None
 
-        words = self._generate_words()
+        words = self._generate_words(word_manager)
         hidden_values = self._generate_hidden_values()
         for i in range(0, WORD_COUNT):
             word = words[i]
@@ -121,12 +122,10 @@ class GameState:
         return GameUpdate(self)
 
     @staticmethod
-    def _generate_words() -> List[str]:
+    def _generate_words(word_manager: WordManager) -> List[str]:
         words = []
         for i in range(0, WORD_COUNT):
-            word = ""
-            for j in range(0, random.randint(3, 8)):
-                word += random.choice(string.ascii_uppercase)
+            word = word_manager.get_random_word()
             words.append(word)
 
         return words

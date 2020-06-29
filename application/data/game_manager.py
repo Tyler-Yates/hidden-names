@@ -3,6 +3,7 @@ import string
 from typing import Optional
 
 from application.data.game_state import GameState
+from application.data.word_manager import WordManager
 
 
 class GameManager:
@@ -10,8 +11,9 @@ class GameManager:
     Manages all the games.
     """
 
-    def __init__(self):
+    def __init__(self, word_manager: WordManager):
         self.games = {}
+        self.word_manager = word_manager
 
     def create_game(self) -> str:
         """
@@ -24,7 +26,7 @@ class GameManager:
         while game_name in self.games:
             game_name = self._create_game_name()
 
-        self.games[game_name] = GameState(game_name)
+        self.games[game_name] = GameState(game_name, self.word_manager)
 
         return game_name
 
