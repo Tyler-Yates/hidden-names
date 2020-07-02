@@ -2,12 +2,35 @@
 <html lang="en">
 <head>
     {% include 'head.html' %}
+
+    <title>Hidden Names Game</title>
+
+    <script type="text/javascript">
+        function join_game() {
+            event.preventDefault();
+            const game_name = document.getElementById("game_name").value;
+            window.location.href = `/games/${game_name}`;
+        }
+    </script>
 </head>
 <body>
 <div class="container">
-    <form action="/create_game" enctype="application/x-www-form-urlencoded" method="post">
-        <button type="submit" class="btn btn-primary">Create Game</button>
-    </form>
+    <div class="row">
+        <div class="col">
+            <form action="/create_game" enctype="application/x-www-form-urlencoded" method="post">
+                <button type="submit" class="btn btn-primary">Create Game</button>
+            </form>
+        </div>
+        <div class="col">
+            <form onsubmit="join_game()" method="post">
+                <div class="form-group">
+                    <label for="game_name">Game Name</label>
+                    <input id="game_name" name="game_name" type="text" maxlength="4" class="form-control" placeholder="">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>
