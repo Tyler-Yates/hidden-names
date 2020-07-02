@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask
 from flask_socketio import SocketIO
 
@@ -7,6 +9,10 @@ from application.data.word_manager import WordManager
 GAME_MANAGER_CONFIG_KEY = "game_manager"
 
 socketio = SocketIO()
+
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("engineio.server").setLevel(logging.WARNING)
+logging.getLogger("socketio.server").setLevel(logging.WARNING)
 
 
 def create_flask_app() -> Flask:

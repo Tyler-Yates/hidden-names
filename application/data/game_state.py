@@ -1,3 +1,4 @@
+import logging
 import random
 from typing import List, Dict
 
@@ -8,6 +9,8 @@ from application.data.word_manager import WordManager
 WORD_COUNT = 25
 BLUE_TEAM_TILES = 9
 RED_TEAM_TILES = 8
+
+LOG = logging.getLogger('GameState')
 
 
 class GameState:
@@ -34,7 +37,7 @@ class GameState:
             hidden_value = hidden_values[i]
             self.game_tiles[word] = GameTile(word, hidden_value)
 
-        print(self.game_tiles)
+        self._log_info("Created new game")
 
     def end_turn(self) -> GameUpdate:
         """
@@ -43,6 +46,8 @@ class GameState:
         Returns:
             the game update
         """
+        self._log_info(f"Team {self.current_team} turn is over")
+
         if self.current_team == 1:
             self.current_team = 2
         else:
@@ -62,6 +67,8 @@ class GameState:
         Returns:
             the game update
         """
+        self._log_info(f"Team {self.current_team} has guessed word {guessed_word}")
+
         game_tile = self.game_tiles.get(guessed_word, None)
 
         # Ensure the guess is actually valid
@@ -117,6 +124,9 @@ class GameState:
             the game update
         """
         return GameUpdate(self)
+
+    def _log_info(self, log_message: str):
+        LOG.info("[%s] %s", self.game_name, log_message)
 
     @staticmethod
     def _generate_words(word_manager: WordManager) -> List[str]:

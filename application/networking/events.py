@@ -1,9 +1,13 @@
+import logging
+
 import flask
 from flask import current_app
 from flask_socketio import emit, join_room
 
 from application import GameManager, GAME_MANAGER_CONFIG_KEY
 from .. import socketio
+
+LOG = logging.getLogger('GameState')
 
 
 @socketio.on("join")
@@ -12,13 +16,13 @@ def joined(message):
     join_room(room)
     session_id = flask.request.sid
 
-    print(f"User {session_id} has joined room {room}")
+    LOG.debug(f"User {session_id} has joined room {room}")
     game_state = _get_game_manager().get_game_state(room)
 
     if game_state:
         emit("game_update", {"game_state": game_state.get_game_update().to_json()}, to=session_id)
     else:
-        print(f"User {session_id} requested to join invalid room.")
+        LOG.warning(f"User {session_id} requested to join invalid room.")
         emit("error", {"message": "Requested to join invalid room."}, to=session_id)
 
 
@@ -27,19 +31,19 @@ def player_mode_change(message):
     room = message["room"]
     session_id = flask.request.sid
 
-    print(f"User {session_id} has changed mode in room {room}")
+    LOG.debug(f"User {session_id} has changed mode in room {room}")
     game_state = _get_game_manager().get_game_state(room)
 
     if game_state:
         emit("game_update", {"game_state": game_state.get_game_update().to_json()}, to=session_id)
     else:
-        print(f"User {session_id} requested to join invalid room.")
+        LOG.warning(f"User {session_id} requested to join invalid room.")
         emit("error", {"message": "Requested to join invalid room."}, to=session_id)
 
 
 @socketio.on("guess")
 def guessed_word(message):
-    print(f"Received guess: {message}")
+    LOG.debug(f"Received guess: {message}")
 
     room = message["room"]
     guessed_word = message["guess"]
@@ -52,7 +56,7 @@ def guessed_word(message):
 
 @socketio.on("end_turn")
 def end_turn(message):
-    print(f"Received end_turn: {message}")
+    LOG.debug(f"Received end_turn: {message}")
 
     room = message["room"]
 
@@ -64,7 +68,7 @@ def end_turn(message):
 
 @socketio.on("new_game")
 def new_game(message):
-    print(f"Received new_game: {message}")
+    LOG.debug(f"Received new_game: {message}")
 
     room = message["room"]
     _get_game_manager().create_game_for_name(room)
