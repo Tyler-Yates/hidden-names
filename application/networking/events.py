@@ -62,5 +62,15 @@ def end_turn(message):
     emit("game_update", {"game_state": game_update.to_json()}, room=room)
 
 
+@socketio.on("new_game")
+def new_game(message):
+    print(f"Received new_game: {message}")
+
+    room = message["room"]
+    _get_game_manager().create_game_for_name(room)
+
+    emit("reload_page", {}, room=room)
+
+
 def _get_game_manager() -> GameManager:
     return current_app.config[GAME_MANAGER_CONFIG_KEY]

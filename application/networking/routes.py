@@ -21,8 +21,8 @@ def game_page(game_name: str):
 
 @main.route("/create_game", methods=["POST"])
 def create_game():
-    game_name = _get_game_manager().create_game()
-    return redirect(f"/games/{game_name}", code=302)
+    game_state = _get_game_manager().create_game()
+    return redirect(f"/games/{game_state.game_name}", code=302)
 
 
 def _get_game_manager() -> GameManager:

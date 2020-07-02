@@ -20,6 +20,12 @@ $(document).ready(function () {
         });
     });
 
+    socket.on('reload_page', function (data) {
+        console.log(data);
+
+        window.location.reload(true);
+    });
+
     add_button_event_listeners(socket, roomName);
 });
 
@@ -64,6 +70,18 @@ function add_button_event_listeners(socket, roomName) {
 
         socket.emit('player_mode_change', {'room': roomName});
     });
+
+    document.getElementById("new-game-button").addEventListener('click', (event) => {
+        confirmAndStartNewGame(socket, roomName);
+    });
+}
+
+function confirmAndStartNewGame(socket, roomName) {
+    const confirmation = confirm("Do you want to start a new game? The current board will be cleared.");
+    if (confirmation === true) {
+        console.info("Starting new game...");
+        socket.emit('new_game', {'room': roomName});
+    }
 }
 
 // Handle updates related to teams.
@@ -80,6 +98,12 @@ function update_team_information(game_state) {
         const teamLabelElement = document.getElementById('team-label');
         teamLabelElement.innerText = "Winning Team:";
         current_team = game_state.winning_team;
+
+        const endTurnButton = document.getElementById("end-turn-button");
+        endTurnButton.style.display = "none";
+
+        const newGameButton = document.getElementById("new-game-button");
+        newGameButton.style.display = "";
     }
 
     if (current_team === 1) {

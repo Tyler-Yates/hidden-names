@@ -15,20 +15,30 @@ class GameManager:
         self.games = {}
         self.word_manager = word_manager
 
-    def create_game(self) -> str:
+    def create_game(self) -> GameState:
         """
-        Creates a new game state and returns the game name.
+        Creates a new game.
 
         Returns:
-            the game name
+            the game state
         """
         game_name = self._create_game_name()
         while game_name in self.games:
             game_name = self._create_game_name()
 
-        self.games[game_name] = GameState(game_name, self.word_manager)
+        return self.create_game_for_name(game_name)
 
-        return game_name
+    def create_game_for_name(self, game_name: str) -> GameState:
+        """
+        Creates a new game with the given game name.
+
+        Returns:
+            the game state
+        """
+        game_state = GameState(game_name, self.word_manager)
+        self.games[game_name] = game_state
+
+        return game_state
 
     def get_game_state(self, game_name: str) -> Optional[GameState]:
         """
