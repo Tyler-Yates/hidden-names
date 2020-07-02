@@ -7,7 +7,7 @@ from flask_socketio import emit, join_room
 from application import GameManager, GAME_MANAGER_CONFIG_KEY
 from .. import socketio
 
-LOG = logging.getLogger('GameState')
+LOG = logging.getLogger("GameState")
 
 
 @socketio.on("join")
