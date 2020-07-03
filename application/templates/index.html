@@ -9,7 +9,7 @@
     <script type="text/javascript">
         function join_game() {
             event.preventDefault();
-            const game_name = document.getElementById("game_name").value;
+            const game_name = document.getElementById("game_name").value.toUpperCase();
             window.location.href = `/games/${game_name}`;
         }
     </script>
